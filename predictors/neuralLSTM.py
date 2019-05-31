@@ -5,6 +5,13 @@ from keras.layers import Dense, Activation, Dropout
 
 import settings as s
 from predictors.predictor import Predictor
+import tensorflow as tf
+from keras.backend.tensorflow_backend import set_session
+config = tf.ConfigProto()
+# config.gpu_options.allow_growth = True
+config.gpu_options.per_process_gpu_memory_fraction = 0.3
+set_session(tf.Session(config=config))
+
 
 class NeuralLSTMPredictor(Predictor):
     def __init__(self, data):
