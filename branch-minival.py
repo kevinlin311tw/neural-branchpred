@@ -67,4 +67,4 @@ def main(filename):
     visualize_test(memdump)
         
 if __name__ == "__main__":
-    main(filename="data/gcc-10M.trace")
+    main(filename="data/gcc-1K.trace")

@@ -1,12 +1,3 @@
-"""
-__name__ = neural.py
-__author__ = Yash Patel
-__description__ = Neural branch predictor, which was of original
-interest and to be compared to these other class benchmarks. Here
-it is only presented as a simply preceptron unit, though we expand
-into networks and reinforcement learning as well
-"""
-
 import numpy as np
 from keras.models import Sequential
 from keras.layers import SimpleRNN, LSTM, Embedding
@@ -37,7 +28,7 @@ class NeuralLSTMPredictor(Predictor):
         out = np.array([np.array([
             int(d[s.BRANCH] == 'T')
         ]) for d in data])
-        self.model.fit(inp, out, epochs=100, batch_size=10)    
+        self.model.fit(inp, out, epochs=10, batch_size=10)    
         
     def predict(self, inst):
         boxed_inst = np.array([
