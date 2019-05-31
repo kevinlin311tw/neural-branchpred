@@ -17,12 +17,14 @@ class NeuralStackedLSTMPredictor(Predictor):
     def __init__(self, data):
         self.model = Sequential()
         max_features = 32
-        data_dim = 16
+        data_dim = 32
         timesteps = 8
-        self.model.add(LSTM(32, return_sequences=True,
-               input_shape=(timesteps, data_dim)))  # returns a sequence of vectors of dimension 32
-        self.model.add(LSTM(32, return_sequences=True))  # returns a sequence of vectors of dimension 32
-        self.model.add(LSTM(32))  # return a single vector of dimension 32
+        self.model.add(Embedding(max_features, output_dim=256))
+        self.model.add(LSTM(128, return_sequences=True,
+               input_shape=(timesteps, data_dim)))  # returns a sequence of vectors of dimension 128
+        self.model.add(LSTM(128, return_sequences=True))  # returns a sequence of vectors of dimension 128
+        self.model.add(LSTM(128))  # return a single vector of dimension 128
+        self.model.add(Dropout(0.5))
         self.model.add(Dense(1, activation='softmax'))
 
         self.model.compile(optimizer='rmsprop',
