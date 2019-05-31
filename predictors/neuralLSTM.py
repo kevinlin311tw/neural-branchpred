@@ -28,9 +28,9 @@ class NeuralLSTMPredictor(Predictor):
                       metrics=['accuracy'])
 
         inp = np.array([np.array([
-            int(d[s.PC], 16)
-            #int(d[s.FALLTHROUGH], 16),
-            #int(d[s.TARGET], 16)
+            int(d[s.PC], 16),
+            int(d[s.FALLTHROUGH], 16),
+            int(d[s.TARGET], 16)
             ]) for d in data])
         out = np.array([np.array([
             int(d[s.BRANCH] == 'T')
@@ -39,10 +39,11 @@ class NeuralLSTMPredictor(Predictor):
         
     def predict(self, inst):
         boxed_inst = np.array([
-            int(inst[s.PC], 16)
-            #int(inst[s.FALLTHROUGH], 16),
-            #int(inst[s.TARGET], 16)
+            int(inst[s.PC], 16),
+            int(inst[s.FALLTHROUGH], 16),
+            int(inst[s.TARGET], 16)
         ])
+        print("*** LSTM:", boxed_inst.shape)
         if int(self.model.predict(boxed_inst)):
             return 'T'
         return 'N'

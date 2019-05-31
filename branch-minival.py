@@ -57,8 +57,8 @@ def main(filename):
         "static"  : StaticPredictor(),
         "bimodal" : BimodalPredictor(n=10),
         "gshare"  : GSharePredictor(n=10),
-        "neural"  : NeuralPredictor(traindump),
-	"neural LSTM (ours)"  : NeuralLSTMPredictor(traindump)
+        "neural"  : NeuralPredictor(traindump)
+	#"neural LSTM (ours)"  : NeuralLSTMPredictor(traindump)
     }
 
     for predictor in tests:
