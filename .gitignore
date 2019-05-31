@@ -1,5 +1,5 @@
 # data
-./data/gcc-10M*
+data/gcc-10M*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
