@@ -12,6 +12,7 @@ from predictors.static  import StaticPredictor
 from predictors.bimodal import BimodalPredictor
 from predictors.gshare  import GSharePredictor
 from predictors.neural  import NeuralPredictor
+from predictors.neuralLSTM  import NeuralLSTMPredictor
 
 from visualization.dynamic import visualize_test
 import settings as s
@@ -56,7 +57,8 @@ def main(filename):
         "static"  : StaticPredictor(),
         "bimodal" : BimodalPredictor(n=10),
         "gshare"  : GSharePredictor(n=10),
-        "neural"  : NeuralPredictor(traindump)
+        "neural"  : NeuralPredictor(traindump),
+	"neural LSTM (ours)"  : NeuralLSTMPredictor(traindump)
     }
 
     for predictor in tests:
