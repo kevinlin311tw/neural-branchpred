@@ -11,7 +11,7 @@ config = tf.ConfigProto()
 # config.gpu_options.allow_growth = True
 config.gpu_options.per_process_gpu_memory_fraction = 0.3
 set_session(tf.Session(config=config))
-
+import code
 
 class NeuralLSTMPredictor(Predictor):
     def __init__(self, data):
@@ -35,6 +35,7 @@ class NeuralLSTMPredictor(Predictor):
         out = np.array([np.array([
             int(d[s.BRANCH] == 'T')
         ]) for d in data])
+        # code.interact(local=locals())
         self.model.fit(inp, out, epochs=10, batch_size=10)    
         
     def predict(self, inst):
@@ -44,6 +45,7 @@ class NeuralLSTMPredictor(Predictor):
             int(inst[s.TARGET], 16)
         ])
         print("*** LSTM:", boxed_inst.shape)
+        boxed_inst = np.expand_dims(boxed_inst, axis=0) 
         if int(self.model.predict(boxed_inst)):
             return 'T'
         return 'N'

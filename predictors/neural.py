@@ -39,10 +39,10 @@ class NeuralPredictor(Predictor):
         out = np.array([np.array([
             int(d[s.BRANCH] == 'T')
         ]) for d in data])
+        self.model.fit(inp, out, epochs=10, batch_size=10) 
         print("** NN: inp dim:{}".format(inp.shape))
-        print("** NN: out dim:{}".format(out.shape))
-        self.model.fit(inp, out, epochs=10, batch_size=10)    
-        
+        print("** NN: out dim:{}".format(out.shape))   
+        print('finish training')        
     def predict(self, inst):
         boxed_inst = np.array([
             int(inst[s.PC], 16),
@@ -50,6 +50,7 @@ class NeuralPredictor(Predictor):
             int(inst[s.TARGET], 16)
         ])
         print("**** NN:",boxed_inst.shape)
+        boxed_inst = np.expand_dims(boxed_inst, axis=0)
         if int(self.model.predict(boxed_inst)):
             return 'T'
         return 'N'

@@ -21,7 +21,7 @@ class NeuralStackedLSTMPredictor(Predictor):
         timesteps = 8
         self.model.add(Embedding(max_features, output_dim=256))
         self.model.add(LSTM(128, return_sequences=True,
-               input_shape=(timesteps, data_dim)))  # returns a sequence of vectors of dimension 128
+               input_shape=(3, timesteps, data_dim)))  # returns a sequence of vectors of dimension 128
         self.model.add(LSTM(128, return_sequences=True))  # returns a sequence of vectors of dimension 128
         self.model.add(LSTM(128))  # return a single vector of dimension 128
         self.model.add(Dropout(0.5))
@@ -32,9 +32,9 @@ class NeuralStackedLSTMPredictor(Predictor):
                       metrics=['accuracy'])
 
         inp = np.array([np.array([
-            int(d[s.PC], 16)
-            #int(d[s.FALLTHROUGH], 16),
-            #int(d[s.TARGET], 16)
+            int(d[s.PC], 16),
+            int(d[s.FALLTHROUGH], 16),
+            int(d[s.TARGET], 16)
             ]) for d in data])
         out = np.array([np.array([
             int(d[s.BRANCH] == 'T')
@@ -43,10 +43,11 @@ class NeuralStackedLSTMPredictor(Predictor):
         
     def predict(self, inst):
         boxed_inst = np.array([
-            int(inst[s.PC], 16)
-            #int(inst[s.FALLTHROUGH], 16),
-            #int(inst[s.TARGET], 16)
+            int(inst[s.PC], 16),
+            int(inst[s.FALLTHROUGH], 16),
+            int(inst[s.TARGET], 16)
         ])
+        boxed_inst = np.expand_dims(boxed_inst, axis=0) 
         if int(self.model.predict(boxed_inst)):
             return 'T'
         return 'N'
