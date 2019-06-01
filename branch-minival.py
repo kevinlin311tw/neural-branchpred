@@ -53,14 +53,14 @@ def main(filename):
     split = np.array_split(memdump, 5)
     testdump = split[0]
     traindump  = np.concatenate(split[1:])
-
+    
     tests = {
         # "static"  : StaticPredictor(),
         # "bimodal" : BimodalPredictor(n=10),
         # "gshare"  : GSharePredictor(n=10),
         "neural"  : NeuralPredictor(traindump),
-	"neural LSTM (ours)"  : NeuralLSTMPredictor(traindump),
-        "neural Stacked LSTM (ours)"  : NeuralStackedLSTMPredictor(traindump)
+	# "neural LSTM (ours)"  : NeuralLSTMPredictor(traindump),
+        # "neural Stacked LSTM (ours)"  : NeuralStackedLSTMPredictor(traindump)
     }
 
     for predictor in tests:

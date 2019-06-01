@@ -23,7 +23,7 @@ class NeuralLSTMPredictor(Predictor):
         self.model.add(Dense(1, activation='sigmoid'))
 
 
-        self.model.compile(optimizer='rmsprop',
+        self.model.compile(optimizer='adam',
                       loss='binary_crossentropy',
                       metrics=['accuracy'])
 
@@ -44,7 +44,7 @@ class NeuralLSTMPredictor(Predictor):
             int(inst[s.FALLTHROUGH], 16),
             int(inst[s.TARGET], 16)
         ])
-        print("*** LSTM:", boxed_inst.shape)
+        # print("*** LSTM:", boxed_inst.shape)
         boxed_inst = np.expand_dims(boxed_inst, axis=0) 
         if int(self.model.predict(boxed_inst)):
             return 'T'
