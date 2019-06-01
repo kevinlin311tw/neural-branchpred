@@ -51,13 +51,13 @@ def main(filename):
     # part of the dump corresponding to static training "history"
     # data that is not seen live by user
     split = np.array_split(memdump, 5)
-    traindump = split[0]
-    testdump  = np.concatenate(split[1:])
+    testdump = split[0]
+    traindump  = np.concatenate(split[1:])
 
     tests = {
-        "static"  : StaticPredictor(),
-        "bimodal" : BimodalPredictor(n=10),
-        "gshare"  : GSharePredictor(n=10),
+        # "static"  : StaticPredictor(),
+        # "bimodal" : BimodalPredictor(n=10),
+        # "gshare"  : GSharePredictor(n=10),
         "neural"  : NeuralPredictor(traindump),
 	"neural LSTM (ours)"  : NeuralLSTMPredictor(traindump),
         "neural Stacked LSTM (ours)"  : NeuralStackedLSTMPredictor(traindump)
