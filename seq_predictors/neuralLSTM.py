@@ -15,11 +15,15 @@ import code
 
 class NeuralLSTMPredictor(Predictor):
     def __init__(self, data, label):
+        batch_size = data.shape[0]
+        max_seq_len = data.shape[1]
+        max_feat_len = data.shape[2]
+
         self.model = Sequential()
-        max_features = 1000
+        # max_features = 1000
         # self.model.add(Embedding(max_features, input_shape=(1,), output_dim=256))
-        self.model.add(LSTM(128,input_shape=(40,23)))
-        self.model.add(Dropout(0.5))
+        self.model.add(LSTM(128,input_shape=(max_seq_len,max_feat_len)))
+        # self.model.add(Dropout(0.5))
         self.model.add(Dense(1, activation='sigmoid'))
 
 
@@ -33,6 +37,5 @@ class NeuralLSTMPredictor(Predictor):
        
         # print("*** LSTM:", boxed_inst.shape)
         boxed_inst = np.expand_dims(input_seq, axis=0) 
-        if int(self.model.predict(boxed_inst)):
-            return 1
-        return 0
+        return self.model.predict(boxed_inst)
+            

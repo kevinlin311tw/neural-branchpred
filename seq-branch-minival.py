@@ -13,17 +13,30 @@ import json
 import code
 from textwrap import wrap
 from tqdm import tqdm
+import random
+def address_to_nhot(input):
+    data_int = int(input,16)
+    # return [int(i) for i in list('{0:0b}'.format(data_int))] 
+    output = [0]*23
+    count = 0
+    for i in bin(data_int)[2:]:
+        output[count] = int(i)
+        count+=1
+    return output
 
 def feat_extract(inst_seq):
     feat_seq = []
     for inst in inst_seq:
         inst = inst.split()
-        pc_int = int(inst[s.PC],16)
-        # pc_bin = bin(pc_int)[2:]
-        # pc_bin = wrap(pc_bin,1)
-        # pc_vector = [float(i) for i in pc_bin]
-        pc_vector = [int(i) for i in list('{0:0b}'.format(pc_int))] 
-        feat_seq.append(pc_vector)
+        pc_vec = address_to_nhot(inst[s.PC])
+        f_vec = address_to_nhot(inst[s.FALLTHROUGH])
+        t_vec = address_to_nhot(inst[s.TARGET])
+        # concatenate all lists
+        concat_vec = pc_vec + f_vec + t_vec
+        # concat_vec = list(np.concatenate([pc_vec,f_vec,t_vec]))
+        # code.interact(local=locals())
+        
+        feat_seq.append(concat_vec)
     return np.array(feat_seq)
 
 def preprocess(filename):
@@ -56,7 +69,8 @@ def evaluate(predictor, data, label):
     for i in range(len(data)):
         target = label[i]
         pred = predictor.predict(data[i])
-        correct += int(target==pred)
+        print('pred prob = %f, pred = %d, gt = %d'%(pred,(pred>0.5),target))
+        correct += int(target==(pred>0.5))
     return correct/len(data)
 
 def main(filename):
@@ -69,12 +83,18 @@ def main(filename):
     # code.interact(local=locals())
     # part of the dump corresponding to static training "history"
     # data that is not seen live by user
+    # code.interact(local=locals()) 
+    # data2 = random.Random(123).shuffle(data)
+    # label2 = random.Random(123).shuffle(label)
+    # code.interact(local=locals())
     data_split = np.array_split(data, 5)
-    test_data = data_split[0]
-    train_data  = np.concatenate(data_split[1:])
     label_split = np.array_split(label, 5)
-    test_label = label_split[0]
-    train_label  = np.concatenate(label_split[1:])
+    test_data  = np.concatenate([data_split[1],data_split[3]])
+    train_data  = np.concatenate([data_split[0],data_split[2],data_split[4]])
+
+    test_label  = np.concatenate([label_split[1],label_split[3]])
+    train_label  = np.concatenate([label_split[0],label_split[2],label_split[4]])
+
     # code.interact(local=locals())   
     tests = {
 	"neural LSTM (ours)"  : NeuralLSTMPredictor(train_data, train_label),
