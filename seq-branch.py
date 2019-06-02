@@ -85,13 +85,13 @@ def main(filename):
     print('max inst len: %d'%(get_max_len(data)))
     max_length = 40  # 40 for 10M dataset, 21 for 1K dataset
     data = sequence.pad_sequences(data, maxlen=max_length)
+    i = int(data.shape[0]/5)
+    test_data = data[:i]
+    train_data = data[i:]
+    test_label = label[:i]
+    train_label = label[i:]
     # code.interact(local=locals())
-    # part of the dump corresponding to static training "history"
-    # data that is not seen live by user
-    # code.interact(local=locals()) 
-    # data2 = random.Random(123).shuffle(data)
-    # label2 = random.Random(123).shuffle(label)
-    # code.interact(local=locals())
+    '''
     data_split = np.array_split(data, 5)
     label_split = np.array_split(label, 5)
     test_data  = np.concatenate([data_split[1],data_split[3]])
@@ -99,7 +99,7 @@ def main(filename):
 
     test_label  = np.concatenate([label_split[1],label_split[3]])
     train_label  = np.concatenate([label_split[0],label_split[2],label_split[4]])
-
+    '''
     # code.interact(local=locals())   
     tests = {
 	"neural LSTM (ours)"  : NeuralLSTMPredictor(train_data, train_label),
