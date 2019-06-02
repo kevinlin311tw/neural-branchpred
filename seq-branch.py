@@ -111,4 +111,4 @@ def main(filename):
    
      
 if __name__ == "__main__":
-    main(filename="data/gcc-1K_seq.trace")
+    main(filename="data/gcc-10M_seq.trace")
