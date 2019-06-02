@@ -1,8 +1,8 @@
 import json
 import settings as s
 
-in_filename = "data/gcc-10M.trace"
-out_filename = "data/gcc-10M_seq.trace"
+in_filename = "data/gcc-1K.trace"
+out_filename = "data/gcc-1K_seq.trace"
 
 def main():
     '''
