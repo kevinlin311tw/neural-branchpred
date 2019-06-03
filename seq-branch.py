@@ -34,8 +34,12 @@ def feat_extract(inst_seq):
         src1_vec = address_to_nhot(inst[s.SRC1])
         src2_vec = address_to_nhot(inst[s.SRC2])
         dst_vec = address_to_nhot(inst[s.DEST])
-        # concatenate all lists
-        concat_vec = pc_vec + f_vec + t_vec + src1_vec + src2_vec + dst_vec
+        immed_vec = [int(inst[s.IMMEDIATE])]
+        #mem_vec = address_to_nhot(inst[s.MEMADDR])
+ 	 
+	# concatenate all lists
+        concat_vec = pc_vec + f_vec + t_vec + src1_vec + src2_vec + dst_vec + \
+                     immed_vec #+ mem_vec
         # concat_vec = list(np.concatenate([pc_vec,f_vec,t_vec]))
         # code.interact(local=locals())
         
@@ -85,7 +89,7 @@ def main(filename):
     print('max inst len: %d'%(get_max_len(data)))
     max_length = 40  # 40 for 10M dataset, 21 for 1K dataset
     data = sequence.pad_sequences(data, maxlen=max_length)
-    i = int(data.shape[0]/5)
+    i = int(data.shape[0]/100)
     test_data = data[:i]
     train_data = data[i:]
     test_label = label[:i]
@@ -102,9 +106,14 @@ def main(filename):
     '''
     # code.interact(local=locals())   
     tests = {
-	"neural LSTM (ours)"  : NeuralLSTMPredictor(train_data, train_label),
+	"neural LSTM (ours)"  : NeuralLSTMPredictor(test_data, test_label),
     }
-    
+   
+    for predictor in tests:
+        print("Start training {} predictor".format(predictor))
+        tests[predictor].train()
+
+ 
     for predictor in tests:
         print("{} predictor had {} accuracy".format(
             predictor, evaluate(tests[predictor], test_data, test_label)))

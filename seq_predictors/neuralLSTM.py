@@ -24,10 +24,11 @@ class NeuralLSTMPredictor(Predictor):
         # configure callbacks
         self.WEIGHTS_SAVE = './checkpoints/weights.{epoch:04d}.h5'
         self.TRAINING_LOG = './checkpoints/training_log.csv'
-        checkpoint = ModelCheckpoint(self.WEIGHTS_SAVE, monitor='loss', verbose=0, save_best_only=False, mode='min', period=2)
-        csv_logger = CSVLogger(self.TRAINING_LOG, append=True)
-        callbacks_list = [checkpoint, csv_logger]
-
+        #checkpoint = ModelCheckpoint(self.WEIGHTS_SAVE, monitor='loss', verbose=0, save_best_only=False, mode='min', period=1)
+        #csv_logger = CSVLogger(self.TRAINING_LOG, append=True)
+        #callbacks_list = [checkpoint, csv_logger]
+        self.data = data
+        self.label = label
         self.model = Sequential()
         # max_features = 1000
         # self.model.add(Embedding(max_features, input_shape=(1,), output_dim=256))
@@ -40,8 +41,15 @@ class NeuralLSTMPredictor(Predictor):
                       loss='binary_crossentropy',
                       metrics=['accuracy'])
         self.model.summary()
-        self.model.fit(data, label, epochs=10, batch_size=10, callbacks=callbacks_list)    
+        #self.model.fit(data, label, epochs=10, batch_size=10, callbacks=callbacks_list)    
 
+
+    def train(self):
+        checkpoint = ModelCheckpoint(self.WEIGHTS_SAVE, monitor='loss', verbose=0, save_best_only=False, mode='min', period=1)
+        csv_logger = CSVLogger(self.TRAINING_LOG, append=True)
+        callbacks_list = [checkpoint, csv_logger]
+        
+        self.model.fit(self.data, self.label, epochs=10, batch_size=10, callbacks=callbacks_list)
 
     def get_last_epoch_and_weights_file(self):
         os.makedirs('checkpoints', exist_ok=True)
