@@ -35,7 +35,7 @@ def main():
     for line in fin:
         seq.append(line.strip())
         inst = line.split()
-        if inst[s.BRANCH] != '-':
+        if inst[s.FLAGS] == 'R' and inst[s.BRANCH] != '-':
             label = int(inst[s.BRANCH] == 'T')
             data.append({"data" : seq, "label" : label}) 
             seq = []

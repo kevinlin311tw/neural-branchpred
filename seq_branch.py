@@ -78,7 +78,7 @@ def evaluate(predictor, data, label):
     for i in range(len(data)):
         target = label[i]
         pred = predictor.predict(data[i])
-        print('pred prob = %f, pred = %d, gt = %d'%(pred,(pred>0.5),target))
+        #print('pred prob = %f, pred = %d, gt = %d'%(pred,(pred>0.5),target))
         correct += int(target==(pred>0.5))
     return correct/len(data)
 
@@ -89,7 +89,7 @@ def main(filename):
     print('max inst len: %d'%(get_max_len(data)))
     max_length = 40  # 40 for 10M dataset, 21 for 1K dataset
     data = sequence.pad_sequences(data, maxlen=max_length)
-    i = int(data.shape[0]/100)
+    i = int(data.shape[0]/5)
     test_data = data[:i]
     train_data = data[i:]
     test_label = label[:i]
@@ -106,12 +106,12 @@ def main(filename):
     '''
     # code.interact(local=locals())   
     tests = {
-	"neural LSTM (ours)"  : NeuralLSTMPredictor(test_data, test_label),
+	"neural LSTM (ours)"  : NeuralLSTMPredictor(train_data, train_label),
     }
    
-    for predictor in tests:
-        print("Start training {} predictor".format(predictor))
-        tests[predictor].train()
+    #for predictor in tests:
+    #    print("Start training {} predictor".format(predictor))
+    #    tests[predictor].train()
 
  
     for predictor in tests:

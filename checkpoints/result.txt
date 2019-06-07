@@ -1,0 +1,1 @@
+LSTM (ours) predictor had 0.8818331798261151 accuracy
